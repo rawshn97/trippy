@@ -1,5 +1,19 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/trippy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/trippy/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/trippy/:path*",
+      "destination": "/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/downloads/(.*)",
