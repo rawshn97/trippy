@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trippy: Gen Z AI Verbatim Google Drive Agent</title>
+  <meta name="description" content="Trippy is the laid-back, high-all-the-time AI paperclip that translates colloquial human thoughts into exact Google Drive file verbatims. No cap." />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>" />
+
+  <!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            crust: '#020617',
+            mantle: '#090d16',
+            surface: '#0f172a',
+            ink: '#f8fafc',
+            'ink-muted': '#94a3b8',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #020617;
+      color: #f8fafc;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    /* Background Grid & Ambient Glow */
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Floating Mascot Animation */
+    .trippy-float-btn {
+      animation: trippy-idle-float 3.5s ease-in-out infinite;
+    }
+    .trippy-float-btn:hover {
+      animation-play-state: paused;
+      transform: scale(1.08) rotate(4deg);
+    }
+    @keyframes trippy-idle-float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(-3deg); }
+    }
+
+    /* Smoke Puff Animation */
+    .smoke-puff {
+      animation: smoke-float 4s ease-out infinite;
+      transform-origin: 106px 68px;
+    }
+    @keyframes smoke-float {
+      0% { opacity: 0.2; transform: translateY(4px) scale(0.8); }
+      50% { opacity: 0.7; transform: translateY(-6px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-16px) scale(1.6); }
+    }
+
+    /* Wobble on click */
+    .trippy-wobble-active {
+      animation: trippy-wobble 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+    @keyframes trippy-wobble {
+      0% { transform: scale(1) rotate(0deg); }
+      20% { transform: scale(1.28) rotate(-14deg); }
+      40% { transform: scale(0.88) rotate(10deg); }
+      60% { transform: scale(1.15) rotate(-6deg); }
+      80% { transform: scale(0.96) rotate(3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    /* Ripple shockwave */
+    .trippy-ripple {
+      position: absolute;
+      border-radius: 9999px;
+      border: 2px solid #34d399;
+      pointer-events: none;
+      animation: trippy-ripple-out 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes trippy-ripple-out {
+      0% { width: 40px; height: 40px; opacity: 1; transform: scale(0.6); }
+      100% { width: 140px; height: 140px; opacity: 0; transform: scale(2.2); }
+    }
+
+    /* Sparkle Particle */
+    .trippy-sparkle {
+      position: absolute;
+      pointer-events: none;
+      font-size: 13px;
+      user-select: none;
+      animation: trippy-sparkle-fly 0.9s ease-out forwards;
+    }
+    @keyframes trippy-sparkle-fly {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
+    }
+
+    .shades-tilted {
+      transform: translate(25px, 35px) rotate(12deg) scale(1.1) !important;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen bg-crust selection:bg-emerald-500 selection:text-black">
+  <!-- Ambient Glow & Background Grid -->
+  <div class="pointer-events-none fixed inset-0 bg-grid opacity-75"></div>
+  <div class="pointer-events-none fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[150px]"></div>
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-40 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <a href="#" class="flex items-center gap-2.5 font-mono text-base font-bold tracking-tight">
+        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-lg">🌿</span>
+        <span class="text-ink">trippy</span>
+        <span class="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-400 border border-emerald-500/30 uppercase">Beta</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-xs font-mono text-ink-muted">
+        <a href="#interactive-sandbox" class="hover:text-emerald-400 transition-colors">Sandbox</a>
+        <a href="#comparison" class="hover:text-emerald-400 transition-colors">Why It Matters</a>
+        <a href="#superpowers" class="hover:text-emerald-400 transition-colors">Superpowers</a>
+        <a href="#compliance" class="hover:text-emerald-400 transition-colors">Security &amp; Compliance</a>
+        <a href="#extension" class="hover:text-emerald-400 transition-colors">Chrome Extension</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a
+          href="https://github.com/rawshn97/trippy"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-ink-muted hover:border-white/20 hover:text-ink transition-colors"
+        >
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span class="hidden sm:inline">GitHub</span>
+        </a>
+        <a
+          href="#waitlist"
+          class="rounded-lg bg-emerald-400 px-3.5 py-1.5 font-mono text-xs font-bold text-crust hover:bg-emerald-300 transition-colors"
+        >
+          Join Waitlist
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+    <section class="text-center space-y-6">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-950/40 px-3.5 py-1.5 text-xs font-mono font-semibold text-emerald-400 backdrop-blur-md shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+        <span>🌿</span>
+        <span>TRIPPY &bull; THE GEN Z VERBATIM AGENT &bull; NO CAP</span>
+        <span class="rounded bg-emerald-500/20 px-1.5 py-0.2 text-[10px] text-emerald-300">100+ Easter Eggs</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="mx-auto max-w-4xl text-3xl font-extrabold tracking-tight text-ink sm:text-5xl lg:text-6xl sm:leading-tight">
+        Stop Searching Google Drive With Exact Words You <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">Lowkey Can't Remember.</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="mx-auto max-w-2xl text-sm leading-relaxed text-ink-muted sm:text-base">
+        Google Drive search is cooked because nobody remembers internal doc verbatims. Trippy is the laid-back, high-all-the-time AI paperclip with red eyes who translates your fuzzy thoughts into exact company document titles, filters out 10 obsolete drafts, and drops the canonical file. Fr fr.
+      </p>
+
+      <!-- Primary Waitlist Card Component -->
+      <div id="waitlist" class="mx-auto max-w-xl rounded-2xl border border-emerald-500/40 bg-gradient-to-b from-slate-900/90 to-slate-950/95 p-6 shadow-2xl backdrop-blur-xl space-y-4 text-left">
+        <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-ink flex items-center gap-2">
+              <span>🚀</span>
+              <span>Join the Waitlist (No Cap)</span>
+            </h3>
+            <p class="text-[11px] text-ink-muted">Reserve priority enterprise beta access for your company domain.</p>
+          </div>
+          <span class="rounded bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] text-emerald-400 border border-emerald-500/30">
+            Q4 2026 Batch
+          </span>
+        </div>
+
+        <!-- Waitlist Form -->
+        <form id="trippy-waitlist-form" class="space-y-3">
+          <div class="space-y-1.5">
+            <label for="waitlist-email" class="block font-mono text-[11px] uppercase tracking-wider text-ink-muted">
+              Work Email Address
+            </label>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input
+                type="email"
+                id="waitlist-email"
+                name="email"
+                required
+                placeholder="name@company.com (work email hits different)"
+                class="flex-1 rounded-xl border border-white/10 bg-black/40 px-3.5 py-2.5 text-xs text-ink placeholder:text-ink-muted focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400"
+              />
+              <button
+                type="submit"
+                id="waitlist-submit-btn"
+                class="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-400 px-5 py-2.5 font-mono text-xs font-bold text-crust shadow-[0_0_15px_rgba(52,211,153,0.3)] hover:bg-emerald-300 hover:scale-105 active:scale-95 transition-all"
+              >
+                <span>Join Waitlist</span>
+                <span>&#10148;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Status Message -->
+          <div id="waitlist-feedback" class="hidden text-xs p-3 rounded-xl border leading-relaxed"></div>
+
+          <!-- Promise No Spam Guarantee -->
+          <div class="flex items-start gap-2 pt-1 text-[11px] text-emerald-300/90 leading-tight">
+            <span class="text-emerald-400 text-sm">&#128274;</span>
+            <p>
+              <strong>0% Spam Guarantee:</strong> We deadass promise zero automated marketing newsletters, zero partner promos, and zero selling of your info. We strictly ping you when your team's beta slot unlocks. Unsubscribe anytime with 1 click.
+            </p>
+          </div>
+        </form>
+
+        <!-- Compliance & Healthy Markers Badges -->
+        <div class="border-t border-white/5 pt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px] font-mono text-ink-muted text-center">
+          <div class="rounded-lg bg-white/5 py-1 px-2 border border-white/5 flex items-center justify-center gap-1">
+            <span>🛡️</span>
+            <span>SOC 2 Type II</span>
+          </div>
+          <div class="rounded-lg bg-white/5 py-1 px-2 border border-white/5 flex items-center justify-center gap-1">
+            <span>🇪🇺</span>
+            <span>GDPR Ready</span>
+          </div>
+          <div class="rounded-lg bg-white/5 py-1 px-2 border border-white/5 flex items-center justify-center gap-1">
+            <span>☁️</span>
+            <span>Zero Doc Retention</span>
+          </div>
+          <div class="rounded-lg bg-white/5 py-1 px-2 border border-white/5 flex items-center justify-center gap-1">
+            <span>🔐</span>
+            <span>AES-256 Cloud</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <a
+          href="#interactive-sandbox"
+          class="inline-flex items-center gap-2 rounded-xl bg-white/10 border border-emerald-500/30 px-5 py-3 font-mono text-xs font-semibold text-ink hover:bg-white/15 hover:border-emerald-400 transition-colors"
+        >
+          <span>&#128065;</span>
+          <span>Try Interactive Sandbox Below</span>
+        </a>
+        <a
+          href="/downloads/trippy-extension.zip"
+          download="trippy-extension.zip"
+          class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 px-5 py-3 font-mono text-xs font-semibold text-ink hover:bg-white/10 transition-colors"
+        >
+          <span>&#128230;</span>
+          <span>Download Chrome Extension (.zip)</span>
+        </a>
+      </div>
+
+      <!-- Quick Trust Counters -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 text-center">
+        <div class="rounded-xl border border-white/5 bg-slate-900/40 p-3">
+          <div class="font-mono text-lg font-bold text-emerald-400">100+</div>
+          <div class="text-[11px] text-ink-muted">Gen Z Easter Eggs &amp; Roasts</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-slate-900/40 p-3">
+          <div class="font-mono text-lg font-bold text-emerald-400">0%</div>
+          <div class="text-[11px] text-ink-muted">Exact Verbatim Needed</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-slate-900/40 p-3">
+          <div class="font-mono text-lg font-bold text-emerald-400">&lt; 1 sec</div>
+          <div class="text-[11px] text-ink-muted">Verbatim Bridge Latency</div>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-slate-900/40 p-3">
+          <div class="font-mono text-lg font-bold text-emerald-400">100%</div>
+          <div class="text-[11px] text-ink-muted">Canonical Approved Files</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Sandbox Section -->
+    <section id="interactive-sandbox" class="py-12">
+      <div class="mx-auto max-w-4xl space-y-4">
+        <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+          <div>
+            <h2 class="text-xl font-bold text-ink flex items-center gap-2">
+              <span>🌿</span>
+              <span>Live Interactive Sandbox: Watch Trippy Cook</span>
+            </h2>
+            <p class="text-xs text-ink-muted">Test how Trippy translates fuzzy non-verbatim slang into canonical team documents.</p>
+          </div>
+          <span class="rounded bg-emerald-500/20 px-2 py-1 font-mono text-[10px] text-emerald-300 border border-emerald-500/30">
+            Client-Side Demo Engine
+          </span>
+        </div>
+
+        <!-- Embedded Sandbox Playground Container -->
+        <div class="overflow-hidden rounded-2xl border border-emerald-500/35 bg-slate-950/90 shadow-2xl backdrop-blur-xl">
+          <!-- Sandbox App Bar -->
+          <div class="flex items-center justify-between border-b border-emerald-500/20 bg-slate-900/80 px-4 py-3">
+            <div class="flex items-center gap-3">
+              <div class="h-10 w-10 flex items-center justify-center rounded-full bg-emerald-950/70 border border-emerald-500/40 shadow-[0_0_10px_rgba(52,211,153,0.3)]">
+                <span class="text-2xl">🌿</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 text-sm font-bold text-ink">
+                  Trippy
+                  <span class="rounded bg-emerald-500/20 px-1.5 py-0.5 font-mono text-[9px] font-semibold text-emerald-400 border border-emerald-500/30 uppercase">
+                    Gen Z Certified
+                  </span>
+                </div>
+                <div class="text-[11px] text-ink-muted">High-Intelligence Google Drive Agent &bull; No Cap</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] font-mono text-emerald-400 hidden sm:inline">Status: Fully Baked &amp; Ready</span>
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+            </div>
+          </div>
+
+          <!-- Quick Chips -->
+          <div class="border-b border-white/5 bg-slate-900/40 px-4 py-2.5">
+            <div class="mb-1.5 text-[10px] font-mono uppercase text-ink-muted tracking-wider">
+              Click any colloquial prompt to test verbatim translation &amp; easter eggs:
+            </div>
+            <div class="flex flex-wrap gap-2" id="sandbox-chips">
+              <button class="sandbox-chip rounded-full border border-emerald-500/30 bg-slate-800/80 px-3 py-1 text-xs text-ink-muted hover:border-emerald-400 hover:bg-emerald-500/15 hover:text-ink transition-all" data-q="pricing sheet">
+                "pricing sheet (fr fr)"
+              </button>
+              <button class="sandbox-chip rounded-full border border-emerald-500/30 bg-slate-800/80 px-3 py-1 text-xs text-ink-muted hover:border-emerald-400 hover:bg-emerald-500/15 hover:text-ink transition-all" data-q="who owns churn">
+                "who owns churn (no cap)"
+              </button>
+              <button class="sandbox-chip rounded-full border border-emerald-500/30 bg-slate-800/80 px-3 py-1 text-xs text-ink-muted hover:border-emerald-400 hover:bg-emerald-500/15 hover:text-ink transition-all" data-q="competitor research">
+                "competitor research (the tea)"
+              </button>
+              <button class="sandbox-chip rounded-full border border-emerald-500/30 bg-slate-800/80 px-3 py-1 text-xs text-ink-muted hover:border-emerald-400 hover:bg-emerald-500/15 hover:text-ink transition-all" data-q="investor pitch deck">
+                "pitch deck (main character)"
+              </button>
+              <button class="sandbox-chip rounded-full border border-purple-500/40 bg-purple-950/40 px-3 py-1 text-xs text-purple-300 hover:border-purple-400 hover:bg-purple-900/50 hover:text-white transition-all" data-q="420">
+                ✦ "420 easter egg"
+              </button>
+              <button class="sandbox-chip rounded-full border border-amber-500/40 bg-amber-950/40 px-3 py-1 text-xs text-amber-300 hover:border-amber-400 hover:bg-amber-900/50 hover:text-white transition-all" data-q="munchies">
+                🌮 "munchies"
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Stream Display Area -->
+          <div id="sandbox-feed" class="h-96 overflow-y-auto p-4 space-y-3 text-xs font-sans">
+            <div class="flex flex-col items-start space-y-1">
+              <div class="rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-mantle/90 p-3.5 text-ink leading-relaxed shadow-sm max-w-[85%]">
+                <p class="font-medium text-emerald-300 mb-1">Yooo... what's good? I'm Trippy fr fr.</p>
+                <p class="text-ink-muted">
+                  Welcome to the official Trippy sandbox. Pick one of the sample prompt chips above or type whatever fuzzy thoughts you have below. Watch how I bridge your words into the exact file titles your team used in Google Drive!
+                </p>
+              </div>
+              <span class="px-1 text-[10px] text-ink-muted">Just now</span>
+            </div>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="border-t border-emerald-500/15 bg-slate-900/80 p-3">
+            <form id="sandbox-form" class="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-surface/90 px-3 py-1.5 focus-within:border-emerald-400 focus-within:shadow-[0_0_15px_rgba(52,211,153,0.3)]">
+              <input
+                type="text"
+                id="sandbox-input"
+                class="flex-1 bg-transparent py-1 text-xs text-ink placeholder:text-ink-muted focus:outline-none"
+                placeholder="Search by intent: e.g. 'pricing sheet', 'who owns churn', 'munchies', '420'..."
+                autocomplete="off"
+              />
+              <button
+                type="submit"
+                class="flex h-8 px-3 items-center justify-center gap-1.5 rounded-lg bg-emerald-400 font-mono text-xs font-bold text-crust hover:bg-emerald-300 focus:outline-none transition-transform active:scale-95"
+              >
+                <span>Translate &amp; Find</span>
+                <span>&#10148;</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Side-by-Side Comparison: Drive vs Trippy -->
+    <section id="comparison" class="py-12 border-t border-white/5">
+      <div class="mx-auto max-w-4xl space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="text-2xl font-bold text-ink sm:text-3xl">
+            Google Drive Search (Cooked) vs. Trippy (Understood The Assignment)
+          </h2>
+          <p class="text-xs text-ink-muted sm:text-sm">
+            Why traditional verbatim search breaks knowledge work, and how semantic translation fixes it.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Native Google Drive (Pain) -->
+          <div class="rounded-2xl border border-red-500/20 bg-gradient-to-b from-red-950/20 to-slate-900/40 p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-red-500/20 pb-3">
+              <span class="text-sm font-bold text-red-400">&#10006; Native Google Drive Search</span>
+              <span class="rounded bg-red-500/10 px-2 py-0.5 text-[10px] font-mono text-red-400">Cooked</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="rounded-lg bg-black/40 p-3 border border-white/5">
+                <span class="text-ink-muted">You search:</span> <strong class="text-red-300">"pricing sheet"</strong>
+              </div>
+              <div class="rounded-lg bg-red-950/30 p-3 text-red-300/90 leading-relaxed border border-red-500/20">
+                <p class="font-bold mb-1">Results returned:</p>
+                <ul class="list-disc pl-4 space-y-1 text-[11px]">
+                  <li>0 exact matches found, OR</li>
+                  <li>`pricing_draft_2021_old.xlsx` (Outdated 4 years ago)</li>
+                  <li>`copy_of_copy_pricing_notes.gdoc` (Random scratchpad)</li>
+                  <li>`temp_pricing_proposal_v1.docx` (Deprecated)</li>
+                </ul>
+              </div>
+              <p class="text-ink-muted text-[11px]">
+                <strong>The outcome:</strong> You give up and ask on Slack: <em>"Hey team, does anyone know where the latest pricing doc lives?"</em> and wait 45 minutes for a reply.
+              </p>
+            </div>
+          </div>
+
+          <!-- Trippy (Fix) -->
+          <div class="rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 to-slate-900/40 p-6 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+              <span class="text-sm font-bold text-emerald-400">&#10004; Trippy Verbatim Agent</span>
+              <span class="rounded bg-emerald-500/20 px-2 py-0.5 text-[10px] font-mono text-emerald-300">Rizzed Up</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="rounded-lg bg-black/40 p-3 border border-emerald-500/20">
+                <span class="text-ink-muted">You search:</span> <strong class="text-emerald-300">"pricing sheet"</strong>
+              </div>
+              <div class="rounded-lg bg-emerald-950/30 p-3 text-emerald-200/90 leading-relaxed border border-emerald-500/20">
+                <p class="font-bold text-emerald-300 mb-1">"I might be tripping fr, but is this what you're looking for?"</p>
+                <div class="text-[11px] space-y-1">
+                  <div>&bull; <strong>Verbatim Bridge:</strong> Translates "pricing sheet" &rarr; "Commercial Model &amp; Tier Matrix"</div>
+                  <div>&bull; <strong>Canonical File:</strong> `FY26 RevOps Commercial Model &amp; Tier Matrix v4`</div>
+                  <div>&bull; <strong>Anti-Draft:</strong> Suppresses 5 legacy 2024 sheets</div>
+                  <div>&bull; <strong>Excerpt Peeking:</strong> Displays tier costs directly in chat</div>
+                </div>
+              </div>
+              <p class="text-ink-muted text-[11px]">
+                <strong>The outcome:</strong> You get the canonical approved sheet in under 1 second without asking a soul.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Superpowers Grid -->
+    <section id="superpowers" class="py-12 border-t border-white/5">
+      <div class="mx-auto max-w-4xl space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="text-2xl font-bold text-ink sm:text-3xl">
+            4 Superpowers of Trippy
+          </h2>
+          <p class="text-xs text-ink-muted sm:text-sm">
+            Built specifically for fast-growing SaaS teams swimming in Google Docs, Sheets, and Slides.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2.5 hover:border-emerald-500/30 transition-colors">
+            <div class="text-2xl">🌿</div>
+            <h3 class="text-base font-bold text-ink">Verbatim Translation Engine</h3>
+            <p class="text-xs text-ink-muted leading-relaxed">
+              Maps colloquial user phrasing (*"competitor research"*, *"who owns churn"*, *"security audit"*) to official internal company naming conventions (*"Landscape Audit"*, *"Client Success RACI"*, *"SOC 2 Bridge Letter"*).
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2.5 hover:border-emerald-500/30 transition-colors">
+            <div class="text-2xl">👁️</div>
+            <h3 class="text-base font-bold text-ink">Red-Eye Anti-Draft Filtering</h3>
+            <p class="text-xs text-ink-muted leading-relaxed">
+              Eliminates draft sprawl. Trippy inspects version tags, approval badges, and recent editor telemetry to promote the single canonical file while silencing 8 obsolete draft variations.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2.5 hover:border-emerald-500/30 transition-colors">
+            <div class="text-2xl">📁</div>
+            <h3 class="text-base font-bold text-ink">Folder &amp; Sibling Intuition</h3>
+            <p class="text-xs text-ink-muted leading-relaxed">
+              Reveals where the document actually lives inside Google Drive and counts sibling files in that folder so you can explore the entire project cluster with one click.
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2.5 hover:border-emerald-500/30 transition-colors">
+            <div class="text-2xl">✦</div>
+            <h3 class="text-base font-bold text-ink">100+ Gen Z Easter Eggs &amp; Zen</h3>
+            <p class="text-xs text-ink-muted leading-relaxed">
+              Packed with 25 found quotes, 25 not-found roasts, 25 rotating idle thoughts, 15 click reactions, and 10 secret keyword triggers like `"420"`, `"trippy"`, `"cooked"`, `"rizz"`, and `"munchies"`.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enterprise Compliance Section -->
+    <section id="compliance" class="py-12 border-t border-white/5">
+      <div class="mx-auto max-w-4xl space-y-8">
+        <div class="text-center space-y-2">
+          <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3 py-1 text-xs font-mono text-emerald-400">
+            <span>🛡️</span>
+            <span>Enterprise Grade Compliance</span>
+          </div>
+          <h2 class="text-2xl font-bold text-ink sm:text-3xl">
+            Built for Security-Conscious SaaS Workspaces
+          </h2>
+          <p class="text-xs text-ink-muted sm:text-sm max-w-2xl mx-auto">
+            We treat enterprise document security with zero compromises. Your files stay in your Google Cloud VPC.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2">
+            <span class="text-xl">☁️</span>
+            <h4 class="text-sm font-bold text-ink">Zero Document Retention</h4>
+            <p class="text-[11px] text-ink-muted leading-relaxed">
+              Document bodies are never copied, downloaded, or cached on our servers. Trippy operates strictly on ephemeral metadata vectors in RAM.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2">
+            <span class="text-xl">🔐</span>
+            <h4 class="text-sm font-bold text-ink">Scoped OAuth 2.0</h4>
+            <p class="text-[11px] text-ink-muted leading-relaxed">
+              Requests the minimum permissions required to inspect file metadata. Zero access to edit, delete, or share workspace files.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-white/5 bg-slate-900/40 p-5 space-y-2">
+            <span class="text-xl">📜</span>
+            <h4 class="text-sm font-bold text-ink">SOC 2 &amp; GDPR Controls</h4>
+            <p class="text-[11px] text-ink-muted leading-relaxed">
+              Continuous compliance audits with SOC 2 Type II audit report available for enterprise security review under NDA.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chrome Extension Section -->
+    <section id="extension" class="py-12 border-t border-white/5">
+      <div class="mx-auto max-w-4xl space-y-8">
+        <div class="text-center space-y-2">
+          <h2 class="text-2xl font-bold text-ink sm:text-3xl">
+            Install in Google Chrome in 15 Seconds
+          </h2>
+          <p class="text-xs text-ink-muted sm:text-sm">
+            No credit cards, no vendor procurement hurdles. Works directly as an unpacked Manifest V3 extension.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div class="rounded-xl border border-white/5 bg-slate-900/50 p-4 space-y-2 text-center">
+            <div class="font-mono text-xl font-bold text-emerald-400">1</div>
+            <h4 class="font-bold text-ink text-xs">Download ZIP</h4>
+            <p class="text-[11px] text-ink-muted">Download the pre-packaged <code class="text-emerald-300">trippy-extension.zip</code> and unzip it.</p>
+          </div>
+
+          <div class="rounded-xl border border-white/5 bg-slate-900/50 p-4 space-y-2 text-center">
+            <div class="font-mono text-xl font-bold text-emerald-400">2</div>
+            <h4 class="font-bold text-ink text-xs">Open Extensions</h4>
+            <p class="text-[11px] text-ink-muted">Navigate to <code class="text-emerald-300">chrome://extensions</code> in your Chrome browser.</p>
+          </div>
+
+          <div class="rounded-xl border border-white/5 bg-slate-900/50 p-4 space-y-2 text-center">
+            <div class="font-mono text-xl font-bold text-emerald-400">3</div>
+            <h4 class="font-bold text-ink text-xs">Developer Mode</h4>
+            <p class="text-[11px] text-ink-muted">Toggle <strong>Developer mode</strong> ON in the top-right corner.</p>
+          </div>
+
+          <div class="rounded-xl border border-white/5 bg-slate-900/50 p-4 space-y-2 text-center">
+            <div class="font-mono text-xl font-bold text-emerald-400">4</div>
+            <h4 class="font-bold text-ink text-xs">Load Unpacked</h4>
+            <p class="text-[11px] text-ink-muted">Click <strong>Load unpacked</strong>, pick the <code class="text-emerald-300">extension</code> folder, and open Google Docs!</p>
+          </div>
+        </div>
+
+        <div class="text-center pt-2">
+          <a
+            href="/downloads/trippy-extension.zip"
+            download="trippy-extension.zip"
+            class="inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-6 py-3 font-mono text-xs font-bold text-crust shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:bg-emerald-300 transition-transform active:scale-95"
+          >
+            <span>&#128230;</span>
+            <span>Download Chrome Extension (.zip)</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 bg-slate-950 py-8 text-center text-xs text-ink-muted">
+    <div class="mx-auto max-w-6xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 font-mono">
+        <span>🌿</span>
+        <span class="text-ink font-bold">trippy</span>
+        <span>&bull; Built by Roshan Raj Mishra</span>
+      </div>
+      <div class="flex items-center gap-4 font-mono text-[11px]">
+        <a href="https://github.com/rawshn97/trippy" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400">GitHub</a>
+        <a href="https://rawshn.com" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400">rawshn.com</a>
+        <a href="#compliance" class="hover:text-emerald-400">Security</a>
+        <a href="#waitlist" class="hover:text-emerald-400">Waitlist</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Trippy Mascot Widget on Bottom Right -->
+  <div id="trippy-floating-root" class="fixed bottom-6 right-6 z-50">
+    <!-- Speech Prompt Bubble -->
+    <div
+      id="trippy-speech-bubble"
+      class="absolute bottom-24 right-1 min-w-[240px] max-w-[290px] rounded-xl border border-emerald-400/40 bg-slate-900/95 p-3.5 text-xs leading-relaxed text-ink shadow-2xl backdrop-blur-md transition-all duration-300"
+    >
+      <div class="mb-1 flex items-center justify-between font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+        <span>Trippy</span>
+        <button id="trippy-speech-close" class="text-ink-muted hover:text-ink text-sm leading-none">&times;</button>
+      </div>
+      <p id="trippy-bubble-text">Bro... Google Drive search is so cooked. Searching 'pricing' gave me a 2021 draft no cap.</p>
+      <div class="absolute -bottom-2 right-8 h-3 w-3 rotate-45 border-r border-b border-emerald-400/40 bg-slate-900/95"></div>
+    </div>
+
+    <!-- Trigger Button -->
+    <button
+      id="trippy-trigger"
+      type="button"
+      class="trippy-float-btn group relative flex h-20 w-20 items-center justify-center rounded-full p-1 transition-transform duration-200 focus:outline-none"
+      title="Click Trippy to translate and find files"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 160" class="h-20 w-20 drop-shadow-[0_12px_20px_rgba(0,0,0,0.5)]">
+        <defs>
+          <linearGradient id="trippy-metal-page" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="20%" stop-color="#e2e8f0"/>
+            <stop offset="45%" stop-color="#94a3b8"/>
+            <stop offset="70%" stop-color="#cbd5e1"/>
+            <stop offset="100%" stop-color="#64748b"/>
+          </linearGradient>
+          <radialGradient id="trippy-blood-left-page" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="65%" stop-color="#ffe4e6"/>
+            <stop offset="100%" stop-color="#ef4444"/>
+          </radialGradient>
+          <radialGradient id="trippy-blood-right-page" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="65%" stop-color="#ffe4e6"/>
+            <stop offset="100%" stop-color="#ef4444"/>
+          </radialGradient>
+        </defs>
+
+        <g transform="translate(10, 8)">
+          <!-- Wire -->
+          <path d="M 50 88 L 50 48 A 13 13 0 0 1 76 48 L 76 102 A 25 25 0 0 1 26 102 L 26 38 A 37 37 0 0 1 100 38 L 100 114"
+                fill="none" stroke="url(#trippy-metal-page)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M 50 88 L 50 48 A 13 13 0 0 1 76 48 L 76 102 A 25 25 0 0 1 26 102 L 26 38 A 37 37 0 0 1 100 38 L 100 114"
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+          <!-- Eyebrows -->
+          <path d="M 36 42 Q 47 34 56 40" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 70 38 Q 80 32 90 38" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+          <!-- Left Eye -->
+          <ellipse cx="48" cy="58" rx="11" ry="14" fill="url(#trippy-blood-left-page)" stroke="#1e293b" stroke-width="2.5"/>
+          <ellipse cx="50" cy="59" rx="5.5" ry="7" fill="#0f172a"/>
+          <circle cx="52" cy="56" r="2" fill="#ffffff"/>
+          <path d="M 37 54 Q 48 58 59 52 Q 59 44 48 44 Q 37 44 37 54 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2"/>
+          <!-- Right Eye -->
+          <ellipse cx="78" cy="56" rx="11" ry="14" fill="url(#trippy-blood-right-page)" stroke="#1e293b" stroke-width="2.5"/>
+          <ellipse cx="80" cy="57" rx="5.5" ry="7" fill="#0f172a"/>
+          <circle cx="82" cy="54" r="2" fill="#ffffff"/>
+          <path d="M 67 52 Q 78 56 89 50 Q 89 42 78 42 Q 67 42 67 52 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2"/>
+          <!-- Grin -->
+          <path d="M 50 82 Q 66 94 82 81" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+          <!-- Chain -->
+          <path d="M 36 98 Q 63 124 90 98" fill="none" stroke="#eab308" stroke-width="3.5" stroke-dasharray="3.5 1.5"/>
+          <circle cx="63" cy="116" r="6" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+          <text x="63" y="119" font-size="7" font-weight="bold" fill="#713f12" text-anchor="middle">T</text>
+          <!-- Joint -->
+          <g transform="translate(76, 82) rotate(-15)">
+            <rect x="0" y="0" width="22" height="4.5" rx="1.5" fill="#f8fafc" stroke="#64748b" stroke-width="0.5"/>
+            <rect x="18" y="0" width="4.5" height="4.5" rx="1.5" fill="#ef4444"/>
+            <circle cx="21" cy="2.2" r="1.5" fill="#f59e0b"/>
+          </g>
+          <!-- Smoke -->
+          <g class="smoke-puff">
+            <circle cx="106" cy="68" r="4.5" fill="#cbd5e1" opacity="0.5"/>
+            <circle cx="112" cy="58" r="6.5" fill="#e2e8f0" opacity="0.4"/>
+            <circle cx="118" cy="46" r="8.5" fill="#f1f5f9" opacity="0.3"/>
+          </g>
+          <!-- Shades -->
+          <g id="page-trippy-shades" transform="translate(30, 24) rotate(-8)">
+            <rect x="0" y="0" width="30" height="12" rx="2" fill="#000000" stroke="#334155" stroke-width="1"/>
+            <rect x="35" y="0" width="30" height="12" rx="2" fill="#000000" stroke="#334155" stroke-width="1"/>
+            <line x1="28" y1="5" x2="36" y2="5" stroke="#000000" stroke-width="2"/>
+            <rect x="3" y="2" width="3" height="3" fill="#ffffff"/>
+            <rect x="38" y="2" width="3" height="3" fill="#ffffff"/>
+          </g>
+        </g>
+      </svg>
+      <span class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+      </span>
+    </button>
+  </div>
+
+  <script>
+    // 1. Waitlist Form Handling
+    const waitlistForm = document.getElementById('trippy-waitlist-form');
+    const emailInput = document.getElementById('waitlist-email');
+    const feedback = document.getElementById('waitlist-feedback');
+    const submitBtn = document.getElementById('waitlist-submit-btn');
+
+    const saved = localStorage.getItem('trippy_waitlist_email');
+    if (saved && feedback) {
+      feedback.classList.remove('hidden');
+      feedback.className = 'text-xs p-3 rounded-xl border leading-relaxed bg-emerald-950/40 border-emerald-500/40 text-emerald-300';
+      feedback.innerHTML = `<strong>You're locked in fr fr!</strong> Spot reserved for <code class="text-white bg-black/40 px-1 py-0.5 rounded">${saved}</code>. Early beta invite drops Q4 2026.`;
+    }
+
+    waitlistForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput?.value.trim().toLowerCase();
+      if (!email || !feedback) return;
+
+      const free = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com'];
+      const domain = email.split('@')[1] || '';
+      const isPersonal = free.includes(domain);
+
+      localStorage.setItem('trippy_waitlist_email', email);
+      feedback.classList.remove('hidden');
+
+      if (isPersonal) {
+        feedback.className = 'text-xs p-3 rounded-xl border leading-relaxed bg-amber-950/40 border-amber-500/40 text-amber-200';
+        feedback.innerHTML = `<strong>Locked in!</strong> Work emails hit different for enterprise beta whitelist prioritization, but we saved your spot (<code class="text-white bg-black/40 px-1 py-0.5 rounded">${email}</code>) no cap. We will ping you when access drops.`;
+      } else {
+        feedback.className = 'text-xs p-3 rounded-xl border leading-relaxed bg-emerald-950/40 border-emerald-500/40 text-emerald-300';
+        feedback.innerHTML = `<strong>Understood the assignment!</strong> Your company domain (<code class="text-white bg-black/40 px-1 py-0.5 rounded">@${domain}</code>) has been prioritized for the early beta wave. Promise no spam, fr fr. Check your inbox soon!`;
+      }
+
+      if (submitBtn) {
+        submitBtn.innerHTML = `<span>Joined &bull; Locked In</span>`;
+        submitBtn.disabled = true;
+      }
+    });
+
+    // 2. Interactive Sandbox Engine
+    const feed = document.getElementById('sandbox-feed');
+    const form = document.getElementById('sandbox-form');
+    const input = document.getElementById('sandbox-input');
+    const chips = document.getElementById('sandbox-chips');
+
+    const FOUND_QUOTES = [
+      "I might be tripping fr, but is this what you're looking for?",
+      "Understood the assignment no cap: pulled the canonical file in 0.3s.",
+      "Bro, your team had 8 obsolete draft versions, but I dropped the approved one. Rizz unlocked.",
+      "Hold up, it's giving main character energy. Found your sacred enterprise scroll.",
+      "Deadass floated through the Google Cloud VPC and secured the bag for you.",
+      "Lowkey baking in the cloud, but this spreadsheet hits different.",
+      "No cap, Google Drive search was gatekeeping this doc from you."
+    ];
+
+    const NOT_FOUND_QUOTES = [
+      "Are you tripping? Because either that file is cooked, or it vanished into the void no cap.",
+      "Deadass looked everywhere, even in the archived folders. Zero results found.",
+      "Wait... what were we searching for again? I got distracted by how shiny this paperclip is lowkey.",
+      "Bro, that search query has zero rizz. Try different words before we both get cooked."
+    ];
+
+    const VERBATIM_DB = [
+      {
+        keywords: ['pricing', 'pricing sheet', 'cost', 'plans', 'subscription', 'how much'],
+        translatedTerms: ['Commercial Model', 'RevOps Tier Matrix', 'Billing SKU Spec'],
+        doc: {
+          title: 'FY26 RevOps Commercial Model & Tier Matrix v4',
+          type: 'Google Sheets',
+          icon: '📊',
+          badge: 'Canonical Approved',
+          folder: 'Google Drive > Revenue Operations > 2026 Commercial Plans',
+          lastTouched: 'Updated 2 days ago by Sarah (Head of RevOps)',
+          score: '99% Semantic Match',
+          excerpt: 'Tier 1 Starter ($49/seat), Tier 2 Growth ($129/seat), Enterprise custom SLA tier. Volume discounts pegged at 50+ seats.',
+          declutterNote: 'Filtered out 5 outdated 2024 draft sheets.'
+        }
+      },
+      {
+        keywords: ['who owns churn', 'churn', 'customer retention', 'raci', 'retention owner'],
+        translatedTerms: ['Client Success RACI', 'Retention OKRs', 'Net Revenue Retention Matrix'],
+        doc: {
+          title: 'Client Success RACI & Retention OKR Governance',
+          type: 'Google Docs',
+          icon: '📄',
+          badge: 'Canonical Approved',
+          folder: 'Google Drive > Executive & People > Cross-Functional RACIs',
+          lastTouched: 'Updated last week by Dave (VP CS)',
+          score: '98% Semantic Match',
+          excerpt: 'Accountable: Head of Customer Success. Responsible: Dedicated CSM Team. Informed: Product Core Squad.',
+          declutterNote: 'Suppressed 3 conflicting draft RACIs from Notion sync.'
+        }
+      },
+      {
+        keywords: ['competitor', 'competitor research', 'rivals', 'market analysis', 'the tea'],
+        translatedTerms: ['Landscape Audit', 'Feature Parity Matrix', 'Competitive Teardown'],
+        doc: {
+          title: 'Market Landscape Audit & Feature Parity Teardown Q3',
+          type: 'Google Docs',
+          icon: '📄',
+          badge: 'Canonical',
+          folder: 'Google Drive > Product Strategy > Competitive Intelligence',
+          lastTouched: 'Updated yesterday by Roshan (Lead PM)',
+          score: '97% Semantic Match',
+          excerpt: 'Deep dive comparison across Pine Labs, Stripe, and Adyen checkout flows with conversion benchmark telemetry.',
+          declutterNote: 'Consolidated findings across 4 research tickets.'
+        }
+      },
+      {
+        keywords: ['pitch deck', 'investor', 'series a', 'deck', 'main character'],
+        translatedTerms: ['Series A Narrative', 'Master Pitch v6', 'Growth & Unit Economics Deck'],
+        doc: {
+          title: 'Series A Narrative & Growth Thesis Master Pitch v6',
+          type: 'Google Slides',
+          icon: '📑',
+          badge: 'Canonical Board Approved',
+          folder: 'Google Drive > Board & Investors > 2026 Series A Round',
+          lastTouched: 'Updated 4 days ago by Founder & CEO',
+          score: '99% Semantic Match',
+          excerpt: '38 Slides: Problem, Wedge, GTM flywheel, $4.2M ARR run rate, NRR 134%, Rule of 40 scorecard.',
+          declutterNote: 'Silenced 11 old variations from previous seed rounds.'
+        }
+      }
+    ];
+
+    function runQuery(q) {
+      const val = q.trim();
+      if (!val || !feed) return;
+
+      const userBubble = document.createElement('div');
+      userBubble.className = 'flex flex-col items-end space-y-1';
+      userBubble.innerHTML = `<div class="rounded-2xl rounded-br-sm bg-emerald-500/20 border border-emerald-500/35 p-3 text-ink max-w-[85%] font-medium"><p>${val}</p></div>`;
+      feed.appendChild(userBubble);
+      feed.scrollTop = feed.scrollHeight;
+
+      const lower = val.toLowerCase();
+
+      setTimeout(() => {
+        const botBubble = document.createElement('div');
+        botBubble.className = 'flex flex-col items-start space-y-1';
+
+        if (lower.includes('420')) {
+          botBubble.innerHTML = `<div class="rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-mantle/90 p-3.5 text-ink leading-relaxed shadow-sm max-w-[88%]"><p class="font-bold text-purple-400">✨ 4:20 PM EASTER EGG UNLOCKED ✨</p><p class="text-xs">Trippy reached peak enlightenment no cap. All Google Drive latency has been replaced with soothing lo-fi beats.</p></div>`;
+        } else if (lower.includes('munchies')) {
+          botBubble.innerHTML = `<div class="rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-mantle/90 p-3.5 text-ink leading-relaxed shadow-sm max-w-[88%]"><p class="font-bold text-amber-400">🌮 MUNCHIES DETECTED 🌮</p><p class="text-xs">Taco Bell, In-N-Out, or double fudge brownies? The cloud runs on carbohydrates, homie.</p></div>`;
+        } else {
+          const match = VERBATIM_DB.find(item => item.keywords.some(k => lower.includes(k) || k.includes(lower)));
+          if (match) {
+            const quote = FOUND_QUOTES[Math.floor(Math.random() * FOUND_QUOTES.length)];
+            const doc = match.doc;
+            botBubble.innerHTML = `
+              <div class="rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-mantle/90 p-3.5 text-ink leading-relaxed shadow-sm max-w-[88%] space-y-2.5">
+                <p class="font-medium text-emerald-300">"${quote}"</p>
+                <div class="rounded-lg bg-emerald-950/40 p-2.5 border border-emerald-500/30 text-[11px] text-emerald-200/90 leading-tight">
+                  <div class="font-bold uppercase tracking-wider text-[9px] text-emerald-400 mb-1 flex items-center justify-between">
+                    <span>Verbatim Bridge Translated</span>
+                    <span class="rounded bg-emerald-500/20 px-1 py-0.2">${doc.score}</span>
+                  </div>
+                  <div>&bull; <strong>Canonical verbatim:</strong> ${match.translatedTerms.map(t => `<code class="bg-black/40 px-1 rounded text-emerald-300">${t}</code>`).join(' ')}</div>
+                </div>
+                <div class="rounded-xl border border-white/10 bg-slate-900/90 p-3 space-y-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xl">${doc.icon}</span>
+                      <div>
+                        <h4 class="font-bold text-ink text-xs">${doc.title}</h4>
+                        <p class="text-[10px] text-ink-muted">${doc.type} &bull; ${doc.lastTouched}</p>
+                      </div>
+                    </div>
+                    <span class="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-mono text-emerald-300 border border-emerald-500/30">${doc.badge}</span>
+                  </div>
+                  <div class="text-[10px] text-ink-muted bg-white/5 rounded px-2 py-1">📁 ${doc.folder}</div>
+                  <p class="text-[11px] text-slate-300 bg-black/30 rounded p-2 border-l-2 border-emerald-400">"${doc.excerpt}"</p>
+                  <div class="text-[10px] text-emerald-400/90 pt-1 border-t border-white/5">🛡️ ${doc.declutterNote}</div>
+                </div>
+              </div>
+            `;
+          } else {
+            const roast = NOT_FOUND_QUOTES[Math.floor(Math.random() * NOT_FOUND_QUOTES.length)];
+            botBubble.innerHTML = `
+              <div class="rounded-2xl rounded-bl-sm border border-emerald-500/20 bg-mantle/90 p-3.5 text-ink leading-relaxed shadow-sm max-w-[88%] space-y-2">
+                <p class="font-medium text-amber-300">"${roast}"</p>
+                <div class="rounded-lg bg-amber-950/30 p-2.5 border border-amber-500/30 text-[11px] text-amber-200/90">
+                  Try searching for <code class="bg-black/40 px-1 rounded text-amber-200">"pricing sheet"</code>, <code class="bg-black/40 px-1 rounded text-amber-200">"who owns churn"</code>, or tap one of the chips above!
+                </div>
+              </div>
+            `;
+          }
+        }
+        feed.appendChild(botBubble);
+        feed.scrollTop = feed.scrollHeight;
+      }, 350);
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input && input.value) {
+        runQuery(input.value);
+        input.value = '';
+      }
+    });
+
+    chips?.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sandbox-chip');
+      if (btn) {
+        const q = btn.getAttribute('data-q');
+        if (q) runQuery(q);
+      }
+    });
+
+    // 3. Floating Mascot Interactions
+    const trigger = document.getElementById('trippy-trigger');
+    const bubble = document.getElementById('trippy-speech-bubble');
+    const bubbleClose = document.getElementById('trippy-speech-close');
+    const bubbleText = document.getElementById('trippy-bubble-text');
+    const shades = document.getElementById('page-trippy-shades');
+
+    const IDLE = [
+      "Bro... Google Drive search is so cooked. Searching 'pricing' gave me a 2021 draft no cap.",
+      "It's giving canonical file energy fr fr.",
+      "Searching exact verbatim is lowkey an L when I can just bridge your vibe.",
+      "Understood the assignment: found your spreadsheet in 0.4s.",
+      "Bro I was floating in the shared drive and this doc had main character energy.",
+      "Why be cooked by 14 duplicate drafts when you can just chill?"
+    ];
+
+    let idleIdx = 0;
+    setInterval(() => {
+      if (bubbleText && !bubble?.classList.contains('hidden')) {
+        idleIdx = (idleIdx + 1) % IDLE.length;
+        bubbleText.textContent = IDLE[idleIdx];
+      }
+    }, 7000);
+
+    bubbleClose?.addEventListener('click', () => {
+      bubble?.classList.add('hidden');
+    });
+
+    trigger?.addEventListener('click', () => {
+      trigger.classList.add('trippy-wobble-active');
+      setTimeout(() => trigger.classList.remove('trippy-wobble-active'), 750);
+      shades?.classList.toggle('shades-tilted');
+
+      const ripple = document.createElement('div');
+      ripple.className = 'trippy-ripple';
+      trigger.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 800);
+
+      bubble?.classList.remove('hidden');
+      if (bubbleText) {
+        bubbleText.textContent = "Boing! Trippy is grooving. Try searching any fuzzy doc above no cap!";
+      }
+    });
+  </script>
+</body>
+</html>

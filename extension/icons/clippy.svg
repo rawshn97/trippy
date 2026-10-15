@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 160" width="140" height="160">
+  <defs>
+    <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="20%" stop-color="#e2e8f0"/>
+      <stop offset="45%" stop-color="#94a3b8"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <filter id="drop-shadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="2" dy="5" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <radialGradient id="bloodshot-left" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#ffe4e6"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </radialGradient>
+    <radialGradient id="bloodshot-right" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#ffe4e6"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </radialGradient>
+  </defs>
+
+  <g filter="url(#drop-shadow)" transform="translate(10, 8)">
+    <!-- Back wire of paperclip -->
+    <path d="M 50 88 L 50 48 A 13 13 0 0 1 76 48 L 76 102 A 25 25 0 0 1 26 102 L 26 38 A 37 37 0 0 1 100 38 L 100 114"
+          fill="none"
+          stroke="url(#metal-grad)"
+          stroke-width="7.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+    <!-- 3D Metallic highlight stripe -->
+    <path d="M 50 88 L 50 48 A 13 13 0 0 1 76 48 L 76 102 A 25 25 0 0 1 26 102 L 26 38 A 37 37 0 0 1 100 38 L 100 114"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          opacity="0.65"/>
+
+    <!-- Chill peaceful eyebrows -->
+    <path d="M 36 42 Q 47 34 56 40" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 70 38 Q 80 32 90 38" fill="none" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Left High Bloodshot Eye -->
+    <g id="left-eye">
+      <ellipse cx="48" cy="58" rx="11" ry="14" fill="url(#bloodshot-left)" stroke="#1e293b" stroke-width="2.5"/>
+      <path d="M 39 54 Q 43 56 42 59" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <path d="M 56 61 Q 53 62 55 66" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <path d="M 40 64 Q 44 63 43 66" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <ellipse cx="50" cy="59" rx="5.5" ry="7" fill="#0f172a"/>
+      <circle cx="52" cy="56" r="2" fill="#ffffff"/>
+      <path d="M 37 54 Q 48 58 59 52 Q 59 44 48 44 Q 37 44 37 54 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2"/>
+    </g>
+
+    <!-- Right High Bloodshot Eye -->
+    <g id="right-eye">
+      <ellipse cx="78" cy="56" rx="11" ry="14" fill="url(#bloodshot-right)" stroke="#1e293b" stroke-width="2.5"/>
+      <path d="M 69 52 Q 73 54 72 57" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <path d="M 86 59 Q 83 60 85 64" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <path d="M 71 62 Q 74 61 73 64" fill="none" stroke="#dc2626" stroke-width="0.8" opacity="0.85"/>
+      <ellipse cx="80" cy="57" rx="5.5" ry="7" fill="#0f172a"/>
+      <circle cx="82" cy="54" r="2" fill="#ffffff"/>
+      <path d="M 67 52 Q 78 56 89 50 Q 89 42 78 42 Q 67 42 67 52 Z" fill="#94a3b8" stroke="#1e293b" stroke-width="2"/>
+    </g>
+
+    <!-- Blissed out wavy grin / smirk -->
+    <path d="M 52 80 Q 64 88 74 78" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round"/>
+    <!-- Tiny gold chain / pendant accent around neck -->
+    <path d="M 38 98 Q 63 112 88 98" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2,2"/>
+    <circle cx="63" cy="106" r="3" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  </g>
+
+  <!-- Chill smoke swirl puff floating above -->
+  <path d="M 98 32 Q 106 24 102 18 Q 98 12 108 8" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+  <path d="M 104 28 Q 112 22 109 16" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+</svg>
