@@ -1,4 +1,4 @@
-# Kitelyne Project Tasks & Research Notes
+# Kitlane Project Tasks & Research Notes
 
 Meeting Context: Preparation for upcoming strategy and alignment meeting between Anand and Roshan.
 
@@ -8,8 +8,10 @@ Meeting Context: Preparation for upcoming strategy and alignment meeting between
 
 - [ ] **Anand**: Make three workflows of the use cases.
 - [ ] **Roshan**: Highspot and Seismic research.
-  - [x] Seismic product UI, architecture, and resource breakdown (Completed below).
-  - [ ] Highspot deep dive and comparison matrix.
+  - [x] Seismic product UI, architecture, and resource breakdown.
+  - [x] Highspot deep dive and core architecture.
+  - [x] Product Module Benchmark: Highspot vs Seismic vs Kitlane.
+  - [x] Scope Boundary: What Kitlane Will Build vs What Kitlane Will NOT Build.
 
 ---
 
@@ -17,8 +19,6 @@ Meeting Context: Preparation for upcoming strategy and alignment meeting between
 
 ### What is Seismic?
 Seismic is an enterprise sales enablement and content management cloud. It bridges internal marketing repositories (Drive, SharePoint, Box) and external sales interactions. Its primary function is ensuring revenue teams only present approved, on-brand, and current-version collateral to prospects while tracking buyer engagement.
-
----
 
 ### Core UI Screens & Anatomy
 
@@ -57,8 +57,6 @@ Seismic is an enterprise sales enablement and content management cloud. It bridg
 #### 5. LiveDocs (Dynamic Document Personalization)
 * **What it looks like**: Template builder where slide decks and contracts pull live CRM fields (customer name, ARR, SKU counts) into locked brand templates.
 
----
-
 ### Easy-to-Consume Resources & Real UI Examples
 
 1. **Official Interactive Click-Through Product Tour**:
@@ -76,8 +74,75 @@ Seismic is an enterprise sales enablement and content management cloud. It bridg
 
 ---
 
-### Key Takeaways for Kitelyne's Design
+## Part 2: Highspot Research Overview
 
-1. **Single-Glance Verification**: Seismic solves document sprawl through strict expiration dates and "Certified" badges, but its interface is notoriously heavy and enterprise-dense. Kitelyne's macOS Finder / Chrome file explorer approach offers a much faster, lighter alternative for fast-moving teams.
-2. **Lead Association**: In Seismic, lead info lives inside CRM widgets. In Kitelyne, displaying the lead and deal stage directly inside the primary file row allows document creators to see commercial context immediately.
-3. **Version Checkbox**: Having an explicit confirmation checkbox or toggle directly in the row (`Latest in Use: [x]`) eliminates ambiguity when sales reps pull pitch decks or quote sheets.
+### What is Highspot?
+Highspot is an end-to-end sales enablement platform combining content management, contextual guidance, training/coaching, and buyer engagement. While Seismic feels like a traditional, heavyweight enterprise document portal, Highspot emphasizes sales guidance ("what to say and what to show") alongside files.
+
+### Core Architecture & UI Concepts
+
+1. **Spots (Targeted Content Hubs)**:
+   - Instead of deep file trees, content is categorized into dedicated "Spots" (e.g., by buyer persona, product line, or sales stage).
+   - Spot policies enforce metadata requirements and expiration timelines so obsolete collateral is systematically pruned.
+
+2. **SmartPages (Context Alongside Content)**:
+   - Highspot's signature UI innovation. Instead of just linking a raw PDF or slide deck, a SmartPage embeds talk-tracks, objection handling tips, and competitor comparison notes directly next to the document.
+
+3. **Pitch & Digital Sales Rooms**:
+   - Reps bundle collateral into customizable, trackable sharing links or buyer portals with live view telemetry.
+
+4. **Training & Coaching (LMS & AI Roleplay)**:
+   - Built-in courses, rep certification tracks, and practice video pitches evaluated by AI and sales managers.
+
+---
+
+## Part 3: Comprehensive Module Benchmark (Seismic vs Highspot vs Kitlane)
+
+| Functional Area | Seismic Modules | Highspot Modules | Kitlane Target Scope |
+| :--- | :--- | :--- | :--- |
+| **Interface Paradigm** | Heavy web portal, deep nested categories | Custom "Spots" and visual dashboard | **macOS Finder / Chrome File Explorer** (high-density list view, instant scanning) |
+| **Version Verification** | Expiration dates, admin certification flags | Spot compliance rules, expiration tags | **Explicit "Latest in Use" confirmation checkbox (`[x]`) + stale draft warnings** |
+| **Version History** | Revision log inside document details | Content revision history drawer | **Visual version tree (v1.0 -> v2.0 -> latest) with one-click audit and rollback** |
+| **Lead / CRM Attribution** | Embedded CRM side panel (Salesforce, Dynamics) | CRM widgets, Opportunity matching | **First-class Lead column & chip visible directly in the file row** |
+| **Search & Discovery** | Semantic search + faceted enterprise filters | AI search + Spot filtering | **Instant verbatim file search + breadcrumb directory navigation** |
+| **Sales Guidance** | Battlecards, inline tips | SmartPages (talk tracks, objection handling) | **Lightweight document notes / summary only (No complex SmartPages)** |
+| **Training & Coaching** | Seismic Learning (Lessonly), AI roleplay | Highspot Training, rep coaching, scorecards | **NOT BUILDING (Out of scope)** |
+| **Buyer Engagement** | Digital Sales Rooms (DSRs), LiveSend | Pitch portal, Digital Sales Rooms | **Lightweight canonical link / preview (NO full DSR builder)** |
+| **Document Generation** | LiveDocs (dynamic CRM data merge) | Template customization engine | **NOT BUILDING (Out of scope for initial product)** |
+| **Analytics Engine** | Slide-by-slide heatmap, multi-touch ROI attribution | Engagement scoring, content win-rate correlation | **Basic view & latest-adoption telemetry (NO heavy attribution modeling)** |
+
+---
+
+## Part 4: Kitlane Scope Boundary (What We Will Build vs What We Will NOT Build)
+
+### What Kitlane WILL BUILD (Core Product Vision)
+
+1. **Finder / Explorer Native UI Layout**:
+   - Three-pane architecture: Navigation Sidebar, Main File Explorer (List/Table mode), and Inspector Details Panel.
+   - High-density rows displaying all critical info in a single glance: Document Name, Format, Latest Version Checkbox, Version Tag, Owner, Date, and Lead/Account context.
+2. **Latest Version Confirmation Checkbox**:
+   - `[x] Latest Version Confirmed`: A direct toggle to mark and verify that a file is the active, canonical version being used by the team.
+   - Instant visual warning when a team member is viewing an outdated draft or branch.
+3. **File Version History & Audit Trail**:
+   - Slide-out drawer displaying full revision history: dates, author attribution, and concise changelog notes.
+   - Quick "Promote to Latest" or rollback action.
+4. **Lead Information Integration**:
+   - Lead column and filterable metadata tags (e.g., `Acme Corp - Discovery - $85k`).
+   - Ability to filter files by active lead or opportunity without leaving the file explorer.
+5. **Browser-Native Speed & Extension Layer**:
+   - Lightweight overlay / Chrome side panel that sits right inside Google Drive, Google Docs, or CRM without needing a slow $100k enterprise portal.
+
+---
+
+### What Kitlane Will NOT BUILD (Explicit Non-Goals & Exclusions)
+
+1. **NO Learning Management System (LMS) or Coaching**:
+   - We will not build training courses, rep quizzes, video role-play grading, or rep certification tracks (like Highspot Training or Seismic Lessonly).
+2. **NO Heavy Digital Sales Room (DSR) Builder**:
+   - We will not build drag-and-drop microsite builders with custom hero banners, buyer video recording widgets, or mutual action plan software. Sharing will remain clean and link-based.
+3. **NO Dynamic Document Merge Engine (CPQ / LiveDocs)**:
+   - We will not parse slide layers to auto-generate custom PowerPoint decks from scratch via template algorithms.
+4. **NO Multi-Touch Revenue Attribution Modeling**:
+   - We will not build complex econometric models calculating how much revenue slide 6 contributed to a closed-won enterprise deal.
+5. **NO Complex Governance Hierarchies & Bureaucratic Taxonomies**:
+   - We will not require full-time administrators to set up 50 Spot policies, approval committees, and 10-tier permission trees. Kitlane is built for immediate utility and zero setup friction.
